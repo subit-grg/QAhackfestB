@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="Form">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        {{ form.destination.label }} <br> 
+        {{ form.destination }}<br>
+        <br>
+        {{ form.delivery_date.label }} <br>
+        {{ form.delivery_date }}<br>
+        <br>
+        {{ form.delivered_by.label }} <br>
+        {{ form.delivered_by }}
+        <br>
+        <br>
+        {{ form.submit }}<br>
+
+    </form>
+</div>
+<div>
+    {% if errors %}
+    {% for error in errors %}
+    <p style="color:red;">{{ error }}</p>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock body %}
