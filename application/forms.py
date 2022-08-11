@@ -27,9 +27,9 @@ class checkDateInFuture():
 
 class DriverForm(FlaskForm):
 
-    forename = StringField('Enter Forename', validators=[DataRequired()])
+    driver_forename = StringField('Enter Forename', validators=[DataRequired()])
 
-    surname = StringField('Enter Surname', validators=[DataRequired()])
+    driver_surname = StringField('Enter Surname', validators=[DataRequired()])
 
     location = StringField('Enter your depot', validators=[DataRequired()])
 
