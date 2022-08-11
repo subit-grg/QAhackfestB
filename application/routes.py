@@ -18,42 +18,81 @@ def view_all_driver():
 def add_new_driver():
     form = DriverForm()
     drivers = Driver.query.all()
-    form.delievered_by.choices = [(user.uid, f"{user.first_name} {user.last_name}") for user in users]
+    form.delievered_by.choices = [(driver.uid, f"{driver.forename} {driver.surname}") for driver in drivers]
     if form.validate_on_submit():
-        b_name = form.book.data
-        b_review = form.book_review.data
-        review_date = form.review_date.data
-        uid = form.review_by.data
-        new_review = Review(book=b_name, book_review=b_review, review_date=review_date, review_by=uid)
-        db.session.add(new_review)
+        d_forename = form.forename.data
+        d_surname = form.surname.data
+        uid = form.location.data
+        new_driver = Driver(forname=d_forename, surname=d_surname, location=uid)
+        db.session.add(new_driver)
         db.session.commit()
-        return redirect(url_for('view_all_reviews'))
-    form.review_date.data = date.today()
-    errors = form.review_date.errors
-    errors += form.book.errors
-    return render_template('review_form.html', form = form, errors = errors)
-
-@app.route('/update-review/<int:id>', methods=['GET', 'POST'])
-def update_review(id):
-    review_to_update = Review.query.get(id)
-    form = ReviewForm()
-    users = User.query.all()
-    form.review_by.choices = [(user.uid, f"{user.first_name} {user.last_name}") for user in users]
+        return redirect(url_for('view_all_drivers'))
+   
+@app.route('/update-driver/<int:id>', methods=['GET', 'POST'])
+def update_driver(id):
+    driver_to_update = Driver.query.get(id)
+    form = DriverForm()
+    drivers = Driver.query.all()
+    form.delievered_by.choices = [(driver.uid, f"{driver.forename} {driver.last_name}") for driver in drivers]
     if form.validate_on_submit():
-        review_to_update.book = form.book.data
-        review_to_update.book_review = form.book_review.data
-        review_to_update.review_date = form.review_date.data
-        review_to_update.review_by = form.review_by.data
+        driver_to_update.forename= form.forename.data
+        driver_to_update.surname = form.surname.data
+        driver_to_update.location = form.location.data
         db.session.commit()
-        return redirect(url_for('view_all_reviews'))
-    form.book.data = review_to_update.book
-    form.book_review.data = review_to_update.book_review
-    form.review_date.data = review_to_update.review_date
+        return redirect(url_for('view_all_drivers'))
+    form.driver.data = driver_to_update.forname
+    form.driver.data = driver_to_update.surname
+    form.review_date.data = driver_to_update.review_date
     return render_template('review_form.html', form=form)
 
-@app.route('/delete-review/<int:id>')
-def delete_review(id):
-    review_to_delete = Review.query.get(id)
-    db.session.delete(review_to_delete)
-    db.session.commit()
-    return redirect(url_for('view_all_reviews'))
+
+
+
+
+
+
+
+
+##############
+
+@app.route('/add-delivery', methods=['GET', 'POST'])
+def create_new_delivery():
+    form = DeliveryForm()
+    drivers = Driver.query.all()
+    form.delivered_by.choices = [(driver.did, f"{driver.forename} {driver.surname}") for driver in drivers]
+    if form.validate_on_submit():
+        customer_name = form.order_name.data
+        order_items = form.ordered_items.data
+        o_date = form.order_date.data
+        d_date = form.delivery_date.data
+        did = form.delivered_by.data
+        new_delivery = Delivery(order_name=customer_name, ordered_item = order_items, order_date=o_date, delivery_date=d_date, delivered_by=did)
+        db.session.add(new_delivery)
+        db.session.commit()
+        return redirect(url_for('view_all_deliveries'))
+    form.due_date.data = date.today()
+    errors = form.due_date.errors
+    errors += form.delivery_name.errors
+    return render_template('delivery_form.html', form = form, errors = errors)
+
+@app.route('/update-delivery/<int:delid>', methods=['GET', 'POST'])
+def update_delivery(id):
+    delivery_to_update = Delivery.query.get(id)
+    form = DeliveryForm()
+    drivers = Driver.query.all()
+    form.delivered_by.choices = [(driver.did, f"{driver.forename} {driver.surname}") for driver in drivers]
+    if form.validate_on_submit():
+        delivery_to_update.order_name = form.order_name.data
+        delivery_to_update.ordered_items = form.ordered_items.data
+        delivery_to_update.order_date = form.order_date.data
+        delivery_to_update.delivery_date = form.delivery_date.data
+        delivery_to_update.delivered_by = form.delivered_by.data
+        db.session.commit()
+        return redirect(url_for('view_all_deliveries'))
+    form.order_name.data = delivery_to_update.order_name
+    form.ordered_items.data = delivery_to_update.ordered_items
+    form.order_date.data = delivery_to_update.order_date
+    form.delivery_date.data = delivery_to_update.delivery_date
+    form.order_date.data = delivery_to_update.order_date
+    form.delivered_by = delivery_to_update.order_date
+    return render_template('delivery_form.html', form=form)
