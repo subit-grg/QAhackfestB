@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 {% block body %}
-
-
-
-
-
-
+<h2>{{ entity }} List</h2>
+{% for driver in drivers %}
+{{ driver.__str__() }}  
+{% if entity == 'Driver' %}
+Review by: {{ driver.driver.__str__() }}
+{% endif %}
+<br>
+{% endfor %}
 {% endblock body %}
